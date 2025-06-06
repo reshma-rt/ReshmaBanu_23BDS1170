@@ -1,0 +1,96 @@
+CREATE DATABASE UNIVERSITY;
+USE UNIVERSITY;
+
+CREATE TABLE VIT_CHENNAI (
+    ID INT,
+    Name VARCHAR(50),
+    Department VARCHAR(50),
+    CGPA FLOAT
+);
+
+CREATE TABLE VIT_AP (
+    ID INT,
+    Name VARCHAR(50),
+    Department VARCHAR(50),
+    CGPA FLOAT
+);
+
+CREATE TABLE VIT_VELLORE (
+    ID INT,
+    Name VARCHAR(50),
+    Department VARCHAR(50),
+    CGPA FLOAT
+);
+
+-- VIT_CHENNAI
+INSERT INTO VIT_CHENNAI VALUES
+(1, 'Arun', 'CSE', 8.5),
+(2, 'Banu', 'ECE', 7.9),
+(3, 'Chitra', 'EEE', 8.1),
+(4, 'Divya', 'CSE', 9.0),
+(5, 'Elam', 'MECH', 6.8),
+(6, 'Farooq', 'CIVIL', 7.5),
+(7, 'Geeta', 'CSE', 9.2),
+(8, 'Hari', 'ECE', 8.0),
+(9, 'Indu', 'CSE', 7.4),
+(10, 'John', 'EEE', 8.6);
+
+-- VIT_AP
+INSERT INTO VIT_AP VALUES
+(11, 'Kiran', 'CSE', 8.3),
+(12, 'Lavanya', 'ECE', 7.7),
+(13, 'Mohan', 'EEE', 8.0),
+(14, 'Nisha', 'MECH', 6.5),
+(15, 'Om', 'CIVIL', 7.1),
+(16, 'Pooja', 'CSE', 8.8),
+(17, 'Qadir', 'ECE', 7.9),
+(18, 'Ritu', 'EEE', 8.2),
+(19, 'Sana', 'CSE', 9.1),
+(20, 'Tom', 'MECH', 6.9);
+
+-- VIT_VELLORE
+INSERT INTO VIT_VELLORE VALUES
+(21, 'Uma', 'CSE', 8.4),
+(22, 'Vijay', 'EEE', 7.6),
+(23, 'Wafa', 'ECE', 8.5),
+(24, 'Xena', 'MECH', 6.7),
+(25, 'Yash', 'CIVIL', 7.3),
+(26, 'Zara', 'CSE', 8.9),
+(27, 'Amit', 'ECE', 8.1),
+(28, 'Bala', 'EEE', 7.8),
+(29, 'Cathy', 'CSE', 9.0),
+(30, 'Dinesh', 'MECH', 7.0);
+
+DELETE FROM VIT_CHENNAI WHERE Department = 'MECH';
+
+START TRANSACTION;
+UPDATE VIT_CHENNAI SET CGPA = 9.9 WHERE Name = 'Geeta';
+ROLLBACK;  
+COMMIT; 
+
+SELECT Name AS StudentName, Department AS Dept FROM VIT_CHENNAI;
+
+
+SELECT * FROM VIT_CHENNAI WHERE Department = 'CSE' AND CGPA > 8.5;
+SELECT * FROM VIT_CHENNAI WHERE Department = 'CSE' OR Department = 'ECE';
+SELECT * FROM VIT_CHENNAI WHERE NOT Department = 'MECH';
+
+SELECT * FROM VIT_CHENNAI WHERE CGPA = 8.5;
+SELECT * FROM VIT_CHENNAI WHERE CGPA != 8.5;
+SELECT * FROM VIT_CHENNAI WHERE CGPA < 8.5;
+SELECT * FROM VIT_CHENNAI WHERE CGPA > 8.5;
+SELECT * FROM VIT_CHENNAI WHERE CGPA <= 8.5;
+SELECT * FROM VIT_CHENNAI WHERE CGPA >= 8.5;
+
+SELECT * FROM VIT_CHENNAI WHERE Department IN ('CSE', 'ECE');
+SELECT * FROM VIT_CHENNAI WHERE Department NOT IN ('MECH', 'CIVIL');
+
+SELECT * FROM VIT_VELLORE WHERE CGPA > 8.0  AND Department NOT IN ('MECH', 'EEE');
+
+SELECT * FROM VIT_CHENNAI
+WHERE ID % 2 = 0 AND Department IN ('CSE', 'ECE');
+
+
+TRUNCATE TABLE VIT_AP;
+
+DROP TABLE VIT_AP;

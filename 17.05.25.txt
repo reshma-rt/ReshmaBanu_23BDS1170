@@ -1,0 +1,90 @@
+CREATE DATABASE VIT_UNIVERSITY;
+USE VIT_UNIVERSITY;
+
+CREATE TABLE VIT_CHENNAI (
+    StudentID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Department VARCHAR(50),
+    CGPA DECIMAL(3, 2)
+);
+
+CREATE TABLE VIT_AP (
+    StudentID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Department VARCHAR(50),
+    CGPA DECIMAL(3, 2)
+);
+
+CREATE TABLE VIT_VELLORE (
+    StudentID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Department VARCHAR(50),
+    CGPA DECIMAL(3, 2)
+);
+
+INSERT INTO VIT_CHENNAI VALUES
+(101, 'Aarav', 'CSE', 8.5),
+(102, 'Meera', 'ECE', 8.3),
+(103, 'Varun', 'EEE', 7.8),
+(104, 'Sneha', 'MECH', 7.5),
+(105, 'Ravi', 'CSE', 8.7),
+(106, 'Divya', 'BIO', 8.1),
+(107, 'Anil', 'IT', 8.4),
+(108, 'Nithya', 'CIVIL', 7.9),
+(109, 'Kiran', 'CSE', 9.0),
+(110, 'Pooja', 'ECE', 8.2);
+
+INSERT INTO VIT_AP VALUES
+(201, 'Vikram', 'CSE', 8.0),
+(202, 'Kavya', 'ECE', 8.4),
+(203, 'Harsha', 'EEE', 7.6),
+(204, 'Aisha', 'MECH', 7.8),
+(205, 'Surya', 'CSE', 8.9),
+(206, 'Isha', 'BIO', 8.3),
+(207, 'Deepak', 'IT', 8.2),
+(208, 'Laya', 'CIVIL', 7.7),
+(209, 'Rohit', 'CSE', 8.8),
+(210, 'Neha', 'ECE', 8.1);
+
+INSERT INTO VIT_VELLORE VALUES
+(301, 'Ajay', 'CSE', 9.1),
+(302, 'Sanya', 'ECE', 8.6),
+(303, 'Tarun', 'EEE', 7.5),
+(304, 'Maya', 'MECH', 7.4),
+(305, 'Yash', 'CSE', 8.8),
+(306, 'Rekha', 'BIO', 8.5),
+(307, 'Naveen', 'IT', 8.3),
+(308, 'Lavanya', 'CIVIL', 7.6),
+(309, 'Riya', 'CSE', 8.7),
+(310, 'Arjun', 'ECE', 8.9);
+
+SELECT * FROM VIT_VELLORE WHERE CGPA > 8.5;
+
+INSERT INTO VIT_AP (StudentID, Name, Department, CGPA)
+VALUES (211, 'Tejas', 'CSE', 9.0);
+
+UPDATE VIT_CHENNAI SET CGPA = 9.2 WHERE StudentID = 105;
+
+ALTER TABLE VIT_CHENNAI ADD Email VARCHAR(100);
+
+ALTER TABLE VIT_CHENNAI DROP COLUMN Email;
+
+ALTER TABLE VIT_CHENNAI MODIFY CGPA DECIMAL(4, 2);
+
+ALTER TABLE VIT_CHENNAI CHANGE Name FullName VARCHAR(50);
+
+TRUNCATE TABLE VIT_AP;
+
+DROP TABLE VIT_VELLORE;
+
+RENAME TABLE VIT_CHENNAI TO VIT_CHENNAI_STUDENTS;
+
+UPDATE VIT_CHENNAI SET Name = 'Aakash' WHERE StudentID = 101;
+
+UPDATE VIT_AP SET CGPA = CGPA + 0.1 WHERE Department = 'CSE';
+
+ALTER TABLE VIT_VELLORE DROP COLUMN Department;
+
+ALTER TABLE VIT_AP ADD YearOfAdmission INT;
+
+

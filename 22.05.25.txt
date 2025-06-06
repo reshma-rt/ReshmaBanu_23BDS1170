@@ -1,0 +1,130 @@
+CREATE DATABASE CompanyDB;
+USE CompanyDB;
+
+CREATE TABLE Employee (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(50),
+    dept_id INT,
+    salary DECIMAL(10, 2)
+);
+
+CREATE TABLE Worker (
+    worker_id INT PRIMARY KEY,
+    emp_id INT,
+    role VARCHAR(50),
+    join_date DATE
+);
+
+CREATE TABLE Department (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(50),
+    location VARCHAR(50),
+    manager VARCHAR(50)
+);
+
+INSERT INTO Employee VALUES
+(1, 'Alice', 101, 50000),
+(2, 'Bob', 102, 55000),
+(3, 'Charlie', 101, 60000),
+(4, 'David', 103, 52000),
+(5, 'Eva', 102, 51000),
+(6, 'Frank', 103, 58000),
+(7, 'Grace', 104, 47000),
+(8, 'Henry', 104, 49000),
+(9, 'Ivy', 101, 53000),
+(10, 'Jack', 102, 62000);
+
+INSERT INTO Worker VALUES
+(201, 1, 'Developer', '2021-05-10'),
+(202, 2, 'Tester', '2021-06-12'),
+(203, 3, 'Manager', '2021-07-15'),
+(204, 4, 'Analyst', '2022-01-01'),
+(205, 5, 'HR', '2022-02-17'),
+(206, 6, 'Developer', '2022-03-25'),
+(207, 7, 'Support', '2022-04-10'),
+(208, 8, 'Intern', '2022-05-11'),
+(209, 9, 'Lead', '2023-01-18'),
+(210, 10, 'Designer', '2023-02-20');
+
+INSERT INTO Department VALUES
+(101, 'IT', 'Chennai', 'Dr. Raj'),
+(102, 'HR', 'Bangalore', 'Ms. Priya'),
+(103, 'Finance', 'Mumbai', 'Mr. Karan'),
+(104, 'Support', 'Hyderabad', 'Ms. Anjali'),
+(105, 'Admin', 'Chennai', 'Mr. Dinesh'),
+(106, 'Legal', 'Delhi', 'Ms. Sanya'),
+(107, 'Marketing', 'Pune', 'Ms. Neha'),
+(108, 'Logistics', 'Kolkata', 'Mr. Nikhil'),
+(109, 'Operations', 'Noida', 'Ms. Tanya'),
+(110, 'Security', 'Ahmedabad', 'Mr. Rahul');
+
+SELECT dept_id, SUM(salary) AS total_salary
+FROM Employee
+GROUP BY dept_id;
+
+SELECT dept_id, SUM(salary) AS total_salary
+FROM Employee
+GROUP BY dept_id
+HAVING SUM(salary) > 150000;
+
+SELECT * FROM Employee
+WHERE salary = (SELECT MAX(salary) FROM Employee);
+
+SELECT * FROM Employee
+WHERE dept_id IN (
+    SELECT dept_id FROM Department
+    WHERE location = 'Chennai'
+);
+
+SELECT emp_name, dept_id, salary
+FROM Employee e1
+WHERE salary > (
+    SELECT AVG(salary) FROM Employee e2
+    WHERE e1.dept_id = e2.dept_id
+);
+
+SELECT emp_name FROM Employee
+WHERE dept_id IN (
+    SELECT dept_id FROM Department
+    WHERE location IN ('Chennai', 'Bangalore')
+);
+
+SELECT emp_name, dept_id, salary
+FROM Employee e1
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employee e2
+    WHERE e2.dept_id = e1.dept_id
+);
+
+SELECT e.emp_name, d.dept_name
+FROM Employee e
+INNER JOIN Department d ON e.dept_id = d.dept_id;
+
+SELECT e.emp_name, d.dept_name
+FROM Employee e, Department d
+WHERE e.dept_id = d.dept_id;
+
+SELECT e.emp_name, d.dept_name
+FROM Employee e
+RIGHT JOIN Department d ON e.dept_id = d.dept_id;
+
+SELECT e.emp_name, d.dept_name
+FROM Employee e
+CROSS JOIN Department d;
+
+SELECT e.emp_name, d.dept_name
+FROM Employee e
+LEFT JOIN Department d ON e.dept_id = d.dept_id
+UNION
+SELECT e.emp_name, d.dept_name
+FROM Employee e
+RIGHT JOIN Department d ON e.dept_id = d.dept_id;
+
+SELECT * FROM Employee
+NATURAL JOIN Department;
+
+SELECT e.emp_name, w.role
+FROM Employee e
+CROSS JOIN Worker w;
+
