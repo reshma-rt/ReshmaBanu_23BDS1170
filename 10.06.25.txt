@@ -1,0 +1,100 @@
+Delete.java   
+
+// Single Delete Operation
+
+package mymongo;
+
+import org.bson.Document;
+import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
+
+public class RemoveOneDoc {
+    public static void main(String[] args) {
+        MongoClient client = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase db = client.getDatabase("myDb");
+        MongoCollection<Document> col = db.getCollection("sampleCollection");
+
+        col.deleteOne(Filters.eq("First_Name", "Mahesh"));
+        System.out.println("Record removed.");
+
+        System.out.println("Remaining records:");
+        for (Document doc : col.find()) {
+            System.out.println(doc);
+        }
+    }
+}
+
+
+-----------------------------------------------------------------------------------------------------
+
+Delete.java   
+
+// Multiple Delete Operation
+
+package mymongo;
+
+import org.bson.Document;
+import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
+
+public class RemoveManyDocs {
+    public static void main(String[] args) {
+        MongoClient client = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase db = client.getDatabase("operators");
+        MongoCollection<Document> col = db.getCollection("sales");
+
+        col.deleteMany(Filters.eq("item", "Cappuccino"));
+        System.out.println("Matching documents deleted.");
+
+        System.out.println("Updated Document List:");
+        for (Document doc : col.find()) {
+            System.out.println(doc);
+        }
+    }
+}
+
+
+--------------------------------------------------------------------
+//with    .limit(2)
+
+package mymongo;
+
+import org.bson.Document;
+import com.mongodb.client.*;
+
+public class LimitedDocs {
+    public static void main(String[] args) {
+        MongoClient client = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase db = client.getDatabase("operators");
+        MongoCollection<Document> col = db.getCollection("sales");
+
+        System.out.println("Showing first 2 documents:");
+        for (Document doc : col.find().limit(2)) {
+            System.out.println(doc);
+        }
+    }
+}
+
+
+--------------------------------------------------------------------------------
+Sorting.java
+
+package mymongo;
+
+import org.bson.Document;
+import com.mongodb.client.*;
+import com.mongodb.BasicDBObject;
+
+public class SortRecords {
+    public static void main(String[] args) {
+        MongoClient client = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase db = client.getDatabase("myDb");
+        MongoCollection<Document> col = db.getCollection("sampleCollection");
+
+        System.out.println("Sorted documents by First_Name (ascending):");
+        for (Document doc : col.find().sort(new BasicDBObject("First_Name", 1))) {
+            System.out.println(doc);
+        }
+    }
+}
+
