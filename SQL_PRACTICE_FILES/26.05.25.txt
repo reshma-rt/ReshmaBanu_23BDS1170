@@ -1,0 +1,189 @@
+package crud_application; // Changed package name
+
+import java.sql.*;
+import java.util.*;
+
+public class StudentCRUD {
+
+    public static void main(String[] args) {
+        StudentCRUD app = new StudentCRUD(); // Renamed object
+        Scanner scanner = new Scanner(System.in);
+        int option;
+
+        do {
+            System.out.println("\n--- STUDENT RECORD SYSTEM ---");
+            System.out.println("1. Add Student");
+            System.out.println("2. View All");
+            System.out.println("3. Modify Name by ID");
+            System.out.println("4. Remove Student by ID");
+            System.out.println("5. Add 'age' Field");
+            System.out.println("6. Remove 'age' Field");
+            System.out.println("7. Display Students with ID < input");
+            System.out.println("8. Quit");
+            System.out.print("Choose option: ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (option) {
+                case 1:
+                    System.out.print("Student ID: ");
+                    String sId = scanner.nextLine();
+                    System.out.print("Student Name: ");
+                    String sName = scanner.nextLine();
+                    app.insertStudent(sId, sName);
+                    break;
+                case 2:
+                    app.viewAll();
+                    break;
+                case 3:
+                    System.out.print("Enter ID to change name: ");
+                    String uid = scanner.nextLine();
+                    System.out.print("New Name: ");
+                    String updatedName = scanner.nextLine();
+                    app.updateStudent(uid, updatedName);
+                    break;
+                case 4:
+                    System.out.print("Enter ID to delete record: ");
+                    String did = scanner.nextLine();
+                    app.removeStudent(did);
+                    break;
+                case 5:
+                    app.addAgeColumn();
+                    break;
+                case 6:
+                    app.dropAgeColumn();
+                    break;
+                case 7:
+                    System.out.print("Enter max ID: ");
+                    int limit = scanner.nextInt();
+                    app.filterById(limit);
+                    break;
+                case 8:
+                    System.out.println("Terminating program.");
+                    break;
+                default:
+                    System.out.println("Invalid selection.");
+            }
+
+        } while (option != 8);
+
+        scanner.close();
+    }
+
+    public void insertStudent(String id, String name) {
+        try (
+            Connection conn = new DB_Connection().getConnection();
+            PreparedStatement pst = conn.prepareStatement("INSERT INTO student(s_id, s_name) VALUES (?, ?)")
+        ) {
+            pst.setString(1, id);
+            pst.setString(2, name);
+            pst.executeUpdate();
+            System.out.println("Student entry added.");
+        } catch (Exception e) {
+            System.out.println("Insert failed: " + e.getMessage());
+        }
+    }
+
+    public void viewAll() {
+        try (
+            Connection conn = new DB_Connection().getConnection();
+            PreparedStatement pst = conn.prepareStatement("SELECT * FROM student");
+            ResultSet rs = pst.executeQuery()
+        ) {
+            System.out.println("\n-- All Student Records --");
+            while (rs.next()) {
+                int id = rs.getInt("s_id");
+                String name = rs.getString("s_name");
+                int age = 0;
+                try {
+                    age = rs.getInt("age");
+                } catch (SQLException ignore) {}
+                System.out.println("ID: " + id + ", Name: " + name + ", Age: " + age);
+            }
+        } catch (Exception e) {
+            System.out.println("Read failed: " + e.getMessage());
+        }
+    }
+
+    public void updateStudent(String id, String newName) {
+        String sql = "UPDATE student SET s_name = ? WHERE s_id = ?";
+        try (
+            Connection conn = new DB_Connection().getConnection();
+            PreparedStatement pst = conn.prepareStatement(sql)
+        ) {
+            pst.setString(1, newName);
+            pst.setString(2, id);
+            int rowsAffected = pst.executeUpdate();
+            System.out.println(rowsAffected > 0 ? "Student record updated." : "No record with ID: " + id);
+        } catch (Exception e) {
+            System.out.println("Update error: " + e.getMessage());
+        }
+    }
+
+    public void removeStudent(String id) {
+        String sql = "DELETE FROM student WHERE s_id = ?";
+        try (
+            Connection conn = new DB_Connection().getConnection();
+            PreparedStatement pst = conn.prepareStatement(sql)
+        ) {
+            pst.setString(1, id);
+            int rows = pst.executeUpdate();
+            System.out.println(rows > 0 ? "Student removed." : "No match found.");
+        } catch (Exception e) {
+            System.out.println("Deletion failed: " + e.getMessage());
+        }
+    }
+
+    public void addAgeColumn() {
+        String sql = "ALTER TABLE student ADD age INT";
+        try (
+            Connection conn = new DB_Connection().getConnection();
+            Statement stmt = conn.createStatement()
+        ) {
+            stmt.executeUpdate(sql);
+            System.out.println("'age' column added.");
+        } catch (SQLException e) {
+            if (e.getMessage().contains("Duplicate")) {
+                System.out.println("'age' column already exists.");
+            } else {
+                System.out.println("Alter table error: " + e.getMessage());
+            }
+        }
+    }
+
+    public void dropAgeColumn() {
+        String sql = "ALTER TABLE student DROP COLUMN age";
+        try (
+            Connection conn = new DB_Connection().getConnection();
+            Statement stmt = conn.createStatement()
+        ) {
+            stmt.executeUpdate(sql);
+            System.out.println("'age' column removed.");
+        } catch (SQLException e) {
+            if (e.getMessage().toLowerCase().contains("unknown column")) {
+                System.out.println("No such column 'age'.");
+            } else {
+                System.out.println("Drop column error: " + e.getMessage());
+            }
+        }
+    }
+
+    public void filterById(int maxId) {
+        String sql = "SELECT * FROM student WHERE s_id < ?";
+        try (
+            Connection conn = new DB_Connection().getConnection();
+            PreparedStatement pst = conn.prepareStatement(sql)
+        ) {
+            pst.setInt(1, maxId);
+            ResultSet rs = pst.executeQuery();
+            System.out.println("\nFiltered Records:");
+            while (rs.next()) {
+                int id = rs.getInt("s_id");
+                String name = rs.getString("s_name");
+                System.out.println("ID: " + id + ", Name: " + name);
+            }
+        } catch (SQLException e) {
+            System.out.println("Filter error: " + e.getMessage());
+        }
+    }
+}

@@ -1,0 +1,93 @@
+DBConnection.java
+
+package dbconnectiondemo; 
+
+import java.sql.*;
+
+public class ConnectToDB {
+    public static void main(String[] args) {
+        String dbUrl      = "jdbc:mysql://localhost:3306/vit?serverTimezone=UTC";
+        String dbUser     = "root";
+        String dbPass     = "Yabro@123";
+
+        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass)) {
+            System.out.println("Database connection successful → " + conn);
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM student");
+
+            while (rs.next()) {
+                int roll = rs.getInt(1);
+                String name = rs.getString(2);
+                System.out.println("Roll No: " + roll + ", Name: " + name);
+            }
+
+        } catch (SQLException ex) {
+            System.err.println("Database error occurred:");
+            ex.printStackTrace();
+        }
+    }
+}
+  
+------------------------------------------------------------------------------------------------------------------------
+
+CRUD_Operations.java
+
+package studentmanagement;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+public class StudentCRUD {
+    public static void main(String[] args) {
+        StudentCRUD action = new StudentCRUD();
+
+        action.insertStudent("201", "Arjun", 88);
+        action.insertStudent("202", "Sneha", 92);
+    }
+
+    public void insertStudent(String rollNo, String studentName, int score) {
+        MyDBConnector db = new MyDBConnector();
+        Connection conn = db.getDBConnection();
+        PreparedStatement pstmt = null;
+
+        try {
+            String sql = "INSERT INTO student VALUES (?, ?, ?)";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, rollNo);
+            pstmt.setString(2, studentName);
+            pstmt.setInt(3, score);
+
+            System.out.println("Prepared Statement: " + pstmt);
+            pstmt.executeUpdate();
+            System.out.println("Record inserted for: " + studentName);
+        } catch (Exception ex) {
+            System.out.println("Insertion failed: " + ex);
+        }
+    }
+}
+
+
+-----------------------------------------------------------------------------------
+
+MyDBConnector.java
+
+package studentmanagement;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class MyDBConnector {
+    public Connection getDBConnection() {
+        Connection conn = null;
+        try {
+            String url  = "jdbc:mysql://localhost:3306/vit?serverTimezone=UTC";
+            String user = "root";
+            String pass = "Yabro@123";
+
+            conn = DriverManager.getConnection(url, user, pass);
+        } catch (Exception e) {
+            System.err.println("Connection failed: " + e);
+        }
+        return conn;
+    }
+}

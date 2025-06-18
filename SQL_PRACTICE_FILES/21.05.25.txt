@@ -1,0 +1,129 @@
+CREATE DATABASE University;
+USE University;
+
+CREATE TABLE Students (
+    student_id INT PRIMARY KEY,                                 
+    name VARCHAR(50) NOT NULL,                             
+    age INT CHECK (age >= 17),                               
+    department VARCHAR(50) DEFAULT 'CSE'                       
+);
+
+CREATE TABLE Departments (
+    dept_id INT,                                                
+    dept_name VARCHAR(50) UNIQUE NOT NULL,                   
+    head VARCHAR(50) DEFAULT 'Not Assigned',               
+    PRIMARY KEY (dept_id)                                    
+);
+
+CREATE TABLE Enrollments (
+    enroll_id INT PRIMARY KEY,                           
+    student_id INT,
+    dept_id INT,
+    enroll_date DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (student_id) REFERENCES Students(student_id) 
+        ON DELETE CASCADE ON UPDATE CASCADE,                  
+    FOREIGN KEY (dept_id) REFERENCES Departments(dept_id)
+);
+
+INSERT INTO Students VALUES 
+(1, 'Alice', 18, 'CSE'),
+(2, 'Bob', 19, 'ECE'),
+(3, 'Charlie', 17, 'MECH'),
+(4, 'David', 20, 'EEE'),
+(5, 'Eva', 21, 'CSE'),
+(6, 'Frank', 22, 'IT'),
+(7, 'Grace', 19, 'CSE'),
+(8, 'Hannah', 18, 'ECE'),
+(9, 'Ian', 20, 'MECH'),
+(10, 'Jane', 21, 'IT');
+
+INSERT INTO Departments VALUES
+(101, 'CSE', 'Dr. Smith'),
+(102, 'ECE', 'Dr. Jones'),
+(103, 'MECH', 'Dr. Watson'),
+(104, 'EEE', 'Dr. Bruce'),
+(105, 'IT', 'Dr. Xavier'),
+(106, 'BIO', 'Dr. Lee'),
+(107, 'CIVIL', 'Dr. Ana'),
+(108, 'ARCH', 'Dr. Ray'),
+(109, 'CHEM', 'Dr. Sam'),
+(110, 'PHY', 'Dr. Kim');
+
+INSERT INTO Enrollments VALUES
+(201, 1, 101, '2023-01-10'),
+(202, 2, 102, '2023-02-11'),
+(203, 3, 103, '2023-03-12'),
+(204, 4, 104, '2023-04-13'),
+(205, 5, 105, '2023-05-14'),
+(206, 6, 106, '2023-06-15'),
+(207, 7, 107, '2023-07-16'),
+(208, 8, 108, '2023-08-17'),
+(209, 9, 109, '2023-09-18'),
+(210, 10, 110, '2023-10-19');
+
+SELECT name, department FROM Students
+WHERE department IN ('CSE', 'ECE', 'IT');
+
+SELECT name, department FROM Students
+WHERE department NOT IN ('CSE', 'ECE', 'IT');
+
+SELECT name, age FROM Students
+WHERE age BETWEEN 18 AND 20;
+
+SELECT name, age FROM Students
+WHERE age NOT BETWEEN 18 AND 20;
+
+SELECT dept_name AS name FROM Departments
+UNION
+SELECT department FROM Students;
+
+SELECT dept_name AS name FROM Departments WHERE dept_id < 105
+UNION
+SELECT department FROM Students WHERE age < 20;
+
+SELECT dept_name AS name FROM Departments WHERE dept_id > 108
+UNION ALL
+SELECT department FROM Students WHERE age > 19;
+
+SELECT name, age FROM Students
+ORDER BY age ASC;
+
+SELECT name, age FROM Students
+ORDER BY age DESC;
+
+SELECT name, department, age FROM Students
+ORDER BY department ASC, age DESC;
+
+SELECT name, age,
+  CASE 
+    WHEN age < 18 THEN 'Minor'
+    WHEN age BETWEEN 18 AND 20 THEN 'Adult'
+    ELSE 'Senior'
+  END AS age_group
+FROM Students;
+
+SELECT COUNT(*) AS total_students FROM Students;
+
+SELECT SUM(age) AS total_age FROM Students;
+
+SELECT AVG(age) AS average_age FROM Students;
+
+SELECT MIN(age) AS youngest_age FROM Students;
+
+SELECT MAX(age) AS oldest_age FROM Students;
+
+SELECT * FROM Students
+WHERE name LIKE 'A%';
+
+SELECT * FROM Students
+WHERE name LIKE '%a';
+
+SELECT * FROM Students
+WHERE name LIKE '%an%';
+
+CREATE VIEW StudentEnrollmentView AS
+SELECT s.name, s.department, e.enroll_date
+FROM Students s
+JOIN Enrollments e ON s.student_id = e.student_id;
+
+SELECT * FROM StudentEnrollmentView WHERE enroll_date > '2023-04-01';
