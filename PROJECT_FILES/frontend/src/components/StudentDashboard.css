@@ -1,0 +1,152 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  color: white;
+}
+
+.student-dashboard {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.student-dashboard h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.student-dashboard h3 {
+  font-size: 20px;
+  margin-top: 40px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.filter-bar input[type="text"],
+.filter-bar input[type="date"] {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  width: 220px;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: #333;
+}
+
+.event-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.event-card {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 16px;
+  border-radius: 16px;
+  width: calc(33.333% - 20px);
+  box-sizing: border-box;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+}
+
+.event-card h4 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.event-card p {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #e0e0e0;
+}
+
+.event-card button {
+  padding: 6px 16px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.event-card button:hover {
+  background-color: #eeeeee;
+}
+
+.event-card button:disabled {
+  background-color: #999999;
+  color: #333;
+  cursor: not-allowed;
+}
+
+/* Export button */
+.export-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.registered-list {
+  margin-top: 16px;
+  padding-left: 20px;
+}
+
+.registered-list li {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 900px) {
+  .event-card {
+    width: calc(50% - 20px);
+  }
+}
+
+@media (max-width: 600px) {
+  .event-card {
+    width: 100%;
+  }
+
+  .filter-bar input {
+    width: 100%;
+  }
+}
+
+.export-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease;
+  width: auto;            
+  display: inline-block;     
+  margin-bottom: 10px;
+}
