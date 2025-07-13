@@ -119,15 +119,3 @@ Example routes:
 * Use different roles for admin and student during signup
 * Events, registrations, and user details are stored in MongoDB (collection names: `users`, `events`, `students`, `registrations`)
 
----
-
-## 🤝 Contributors
-
-* 👩‍💻 Reshma Banu A
-* ✨ Open to collaborators
-
----
-
-## 📜 License
-
-This project is for academic and learning purposes. You may modify and reuse with attribution.
